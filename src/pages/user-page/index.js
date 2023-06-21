@@ -9,7 +9,7 @@ const UserPage = () => {
     return (
         <div className='overflow-x-hidden'>
             {/* Left Menu */}
-                <NavBar selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
+            <NavBar selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
 
             {/* Right Content */}
             <div className="ml-72 bg-white p-4">

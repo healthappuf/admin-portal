@@ -1,11 +1,21 @@
 import { Search } from '@mui/icons-material';
-import userData from './user-data.json';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import getUserData from '../../util/db/userQueries';
+
 function UserContent() {
 
     const [searchPhrase, setSearchPhrase] = useState("");
+    const [userData, setUserData] = useState([]);
 
-    const isFilteredRecord = (userRecord) => (userRecord.name.toUpperCase().includes(searchPhrase.toUpperCase()) || userRecord.doctorAssigned.toUpperCase().includes(searchPhrase.toUpperCase()));
+    useEffect(() => {
+        async function checkData() {
+            const data = await getUserData();
+            setUserData(data);
+        }
+        checkData();
+    }, []);
+
+    const isFilteredRecord = (userRecord) => (userRecord.name.toUpperCase().includes(searchPhrase.toUpperCase()) || userRecord.doctor.name.toUpperCase().includes(searchPhrase.toUpperCase()));
 
     return (
         <div className="p-4 overflow-hidden">
@@ -32,16 +42,16 @@ function UserContent() {
                             <th className="py-2 px-4 text-left ">Name</th>
                             <th className="py-2 px-4 text-left">Doctor Assigned</th>
                             <th className="py-2 px-4 text-left">Last Session</th>
-                            <th className="py-2 px-4 text-left">Score</th>
+                            <th className="py-2 px-4 text-left">Total Sessions</th>
                         </tr>
                     </thead>
                     <tbody className=" overflow-y-scroll">
                         {userData.filter(isFilteredRecord).map((item, index) => (
                             <tr key={index} className={(index % 2 === 1) ? "bg-sky-50" : ""}>
                                 <td className="py-2 px-4">{item.name}</td>
-                                <td className="py-2 px-4">{item.doctorAssigned}</td>
+                                <td className="py-2 px-4">{item.doctor.name}</td>
                                 <td className="py-2 px-4">{item.lastSession}</td>
-                                <td className="py-2 px-4">{item.score}</td>
+                                <td className="py-2 px-4">{item.sessionCount}</td>
                             </tr>
                         ))}
                     </tbody>
